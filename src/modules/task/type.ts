@@ -6,3 +6,9 @@ export type Task = {
 };
 
 export type Tasks = Task[];
+
+// export type CreateTask = {
+//   title: string;
+// }
+
+export type CreateTaskData = Pick<Task, "title">;

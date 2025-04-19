@@ -1,11 +1,11 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { AddTaskForm } from "@/components/shared/add-task-form";
 import { Tasks } from "@/components/tasks";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
-import { Button } from "./components/ui/button";
-import * as Popover from "@radix-ui/react-popover";
+import type { CreateTaskData, Task } from "@/modules/task/type";
 
 export function App() {
-  const [tasks, setTasks] = useState([
+  const [tasks, setTasks] = useState<Task[]>([
     {
       id: "a",
       title: "Go to gym",
@@ -38,20 +38,20 @@ export function App() {
     },
   ]);
 
-  function addTask() {
-    const newTask = {
+  function removeTask(id: string) {
+    const updatedTasks = tasks.filter((task) => task.id !== id);
+    setTasks(updatedTasks);
+  }
+
+  function addTask(createTaskData: CreateTaskData) {
+    const newTask: Task = {
       id: String(tasks.length + 1),
-      title: "New Todo",
+      title: createTaskData.title,
       completed: false,
       datetime: new Date(),
     };
 
     const updatedTasks = [...tasks, newTask];
-    setTasks(updatedTasks);
-  }
-
-  function removeTask(id: string) {
-    const updatedTasks = tasks.filter((task) => task.id !== id);
     setTasks(updatedTasks);
   }
 
@@ -73,13 +73,10 @@ export function App() {
 
       <main className="mx-auto max-w-2xl space-y-10">
         <div>
-          <Button size="sm" onClick={addTask}>
-            Add Task
-          </Button>
+          <AddTaskForm addTask={addTask} />
         </div>
 
         <Tasks tasks={tasks} removeTask={removeTask} />
-        <Popover.Root />
       </main>
     </div>
   );
